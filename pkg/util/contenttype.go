@@ -8,8 +8,11 @@ import (
 	"strings"
 )
 
-var ErrFileEmpty = errors.New("file is empty")
-var ErrFileNotText = errors.New("file is not a text file")
+var (
+	ErrFileEmpty   = errors.New("file is empty")
+	ErrIsDir       = errors.New("file is a directory")
+	ErrFileNotText = errors.New("file is not a text file")
+)
 
 func detectContentType(file io.Reader) string {
 	// Only the first 512 bytes are used to sniff the content type.
@@ -45,7 +48,7 @@ func IsTextFile(file *os.File) error {
 	}
 
 	if e.IsDir() {
-		return os.ErrInvalid
+		return ErrIsDir
 	}
 
 	if !isTextFile(file) {
