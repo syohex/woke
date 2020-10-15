@@ -25,7 +25,7 @@ func generateFileViolationsFromFilename(filename string, rules []*rule.Rule) (*r
 // generateFileViolations reads the file and returns results of places where rules are broken
 // this function will not close the file, that should be handled by the caller
 func generateFileViolations(file *os.File, rules []*rule.Rule) (*result.FileResults, error) {
-	filename := filepath.ToSlash(file.Name())
+	filename := filepath.FromSlash(file.Name())
 	start := time.Now()
 	defer func() {
 		log.Debug().
