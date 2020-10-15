@@ -4,6 +4,7 @@ import (
 	"errors"
 	"io/ioutil"
 	"os"
+	"path/filepath"
 	"strings"
 	"time"
 
@@ -26,8 +27,12 @@ func NewIgnore(lines []string, pathsForGitIgnores []string) *Ignore {
 			Msg("finished compiling ignores")
 	}()
 
-	lines = append(lines, readIgnoreFile(".gitignore")...)
-	lines = append(lines, readIgnoreFile(".wokeignore")...)
+	cwd, err := os.Getwd()
+	if err != nil {
+		cwd = "."
+	}
+	lines = append(lines, readIgnoreFile(filepath.Join(cwd, ".gitignore"))...)
+	lines = append(lines, readIgnoreFile(filepath.Join(cwd, ".wokeignore"))...)
 
 	ignorer := Ignore{
 		matcher: gitignore.CompileIgnoreLines(lines...),
